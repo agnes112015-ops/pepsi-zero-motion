@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pepsi Zero Sugar — 30s Motion Spot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=League+Gothic&family=Space+Mono&family=Noto+Sans+KR:wght@700&display=block" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+            :root {
+        --blue: #0a3cff;
+        --electric: #1e6bff;
+        --ice: #bfe6ff;
+        --black: #05060a;
+        --white: #ffffff;
+        --red: #e4002b;
+        --font-display: "Archivo Black";
+        --font-cond: "League Gothic";
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+      #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+      .scene { display: none; }
+      #ui { position: fixed; left: 0; right: 0; bottom: 0; padding: 14px 20px; display: flex; align-items: center; gap: 14px; background: linear-gradient(transparent, rgba(0,0,0,.7)); opacity: 0; transition: opacity .3s; font: 14px/1 "Space Mono", monospace; color: #fff; z-index: 10; }
+      body:hover #ui, body.paused #ui { opacity: 1; }
+      #ui button { background: none; border: 0; color: #fff; font: inherit; cursor: pointer; padding: 6px 10px; }
+      #bar { flex: 1; height: 6px; background: rgba(255,255,255,.25); border-radius: 3px; cursor: pointer; position: relative; }
+      #fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #1e6bff; border-radius: 3px; }
+      #start { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: rgba(5,6,10,.82); color: #fff; cursor: pointer; z-index: 20; font-family: "Archivo Black", sans-serif; border: 0; width: 100%; }
+      #start .play { width: 110px; height: 110px; border-radius: 50%; background: #0a3cff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 60px rgba(30,107,255,.6); }
+      #start .play::after { content: ""; margin-left: 10px; border-left: 38px solid #fff; border-top: 24px solid transparent; border-bottom: 24px solid transparent; }
+      #start span { font-size: 22px; letter-spacing: .08em; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--black); font-family: var(--font-display); color: var(--white); }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+      .kr { font-family: "Noto Sans KR", "Malgun Gothic", sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+      .cap { position: absolute; left: 0; right: 0; bottom: 120px; text-align: center; font-size: 44px; color: var(--white); text-shadow: 0 4px 30px rgba(0,0,0,.5); }
+      .ch { display: inline-block; will-change: transform; }
+
+      /* bubbles */
+      .bubbles { position: absolute; inset: 0; pointer-events: none; }
+      .bub { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.7), rgba(255,255,255,.05) 45%, transparent 60%); }
+
+      /* can (swap with real product shot: replace .can contents with <img src="assets/can.png">) */
+      .can { position: absolute; width: 300px; height: 560px; border-radius: 34px / 26px; background:
+          linear-gradient(90deg, #020205 0%, #23262e 14%, #0b0c10 30%, #000 55%, #2a2d36 78%, #08090c 100%); box-shadow: 0 60px 120px rgba(0,40,255,.35); overflow: hidden; }
+      .can::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 34px; background: linear-gradient(90deg,#6c7280,#e9edf3 25%,#8a909c 50%,#f4f6fa 75%,#6c7280); border-radius: 34px 34px 6px 6px / 20px 20px 6px 6px; }
+      .can::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: linear-gradient(90deg,#5b616d,#d7dbe2 30%,#7b818c 60%,#e6e9ee); }
+      .can .band { position: absolute; left: 0; right: 0; top: 300px; height: 70px; background: linear-gradient(90deg,#0028b8,var(--electric) 30%,#0a3cff 60%,#0019a0); }
+      .can .word { position: absolute; left: 50%; top: 92px; transform: translateX(-50%); font-family: var(--font-cond); font-size: 150px; line-height: .82; text-align: center; color: #fff; letter-spacing: .01em; }
+      .can .word small { display: block; font-size: 64px; color: var(--electric); }
+      .can .brand { position: absolute; left: 0; right: 0; top: 314px; text-align: center; font-family: var(--font-display); font-size: 36px; color: #fff; letter-spacing: -.02em; }
+      .can .shine { position: absolute; top: 0; bottom: 0; width: 60px; left: 60px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent); }
+      .drop { position: absolute; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(190,220,255,.35) 40%, rgba(255,255,255,.05) 70%); }
+
+      /* S1 */
+      #s1 { background: radial-gradient(ellipse at 50% 120%, #06135a 0%, var(--black) 60%); }
+      #psst { font-family: var(--font-cond); font-size: 300px; letter-spacing: .04em; color: var(--white); }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+
+      /* S2 */
+      #s2 { background: var(--blue); }
+      #zero { font-family: var(--font-display); font-size: 420px; line-height: .8; letter-spacing: -.04em; }
+      #sugar { position: absolute; top: 640px; left: 0; right: 0; text-align: center; font-family: var(--font-cond); font-size: 220px; letter-spacing: .3em; color: transparent; -webkit-text-stroke: 4px #fff; }
+      #g0 { position: absolute; right: 150px; top: 120px; font-family: var(--font-display); font-size: 160px; color: var(--ice); }
+      #g0 span { font-size: 60px; }
+      #s2wipe { position: absolute; inset: 0; background: var(--black); transform-origin: 50% 100%; }
+
+      /* S3 */
+      #s3 { background: radial-gradient(circle at 50% 55%, #0b2aa8 0%, #030516 55%, var(--black) 100%); }
+      .rowtxt { position: absolute; left: 0; right: 0; text-align: center; font-family: var(--font-cond); line-height: .85; white-space: nowrap; }
+      #max { top: 90px; font-size: 330px; letter-spacing: .02em; }
+      #taste { top: 640px; font-size: 330px; color: transparent; -webkit-text-stroke: 5px var(--electric); }
+      #ring { position: absolute; left: 50%; top: 50%; width: 760px; height: 760px; margin: -380px 0 0 -380px; border-radius: 50%; border: 3px solid rgba(30,107,255,.6); }
+
+      /* S4 */
+      #s4 { background: var(--black); }
+      #icecold { font-family: var(--font-cond); font-size: 360px; letter-spacing: .12em; color: transparent; -webkit-text-stroke: 3px var(--ice); }
+      #hush { position: absolute; top: 220px; left: 0; right: 0; text-align: center; font-family: "Space Mono"; font-size: 34px; letter-spacing: .6em; color: var(--ice); }
+
+      /* S5 */
+      #s5 { background: var(--black); }
+      .w { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 400px; letter-spacing: -.05em; opacity: 0; }
+
+      /* S6 */
+      #s6 { background: radial-gradient(circle at 30% 55%, #1240ff 0%, #061a8a 40%, #020414 100%); }
+      #endcan { left: 330px; top: 260px; }
+      #wordmark { position: absolute; left: 820px; top: 270px; font-family: var(--font-display); font-size: 210px; letter-spacing: -.06em; line-height: .9; }
+      #zs { position: absolute; left: 832px; top: 470px; font-family: var(--font-cond); font-size: 120px; letter-spacing: .28em; color: var(--ice); }
+      #slogan { position: absolute; left: 836px; top: 640px; font-family: var(--font-display); font-size: 64px; letter-spacing: -.02em; line-height: 1.1; }
+      #slogan b { color: var(--ice); font-weight: inherit; }
+      #rule { position: absolute; left: 836px; top: 612px; width: 820px; height: 6px; background: var(--white); transform-origin: 0 50%; }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+
+      <!-- S1: the hiss -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="4" data-track-index="0" data-track-kind="graphics">
+        <div class="bubbles" id="b1"></div>
+        <div class="center"><div id="psst"><span class="ch">P</span><span class="ch">S</span><span class="ch">S</span><span class="ch">S</span><span class="ch">T</span><span class="ch">.</span></div></div>
+        <div id="flash"></div>
+      </div>
+
+      <!-- S2: ZERO -->
+      <div id="s2" class="scene clip" data-start="4" data-duration="6" data-track-index="0" data-track-kind="graphics">
+        <div class="bubbles" id="b2"></div>
+        <div class="center"><div id="zero"><span class="ch">Z</span><span class="ch">E</span><span class="ch">R</span><span class="ch">O</span></div></div>
+        <div id="sugar">SUGAR</div>
+        <div id="g0">0<span>g</span></div>
+        <div class="cap kr" id="cap1">딱. 그 한 모금의 짜릿함.</div>
+        <div id="s2wipe"></div>
+      </div>
+
+      <!-- S3: MAXIMUM TASTE -->
+      <div id="s3" class="scene clip" data-start="10" data-duration="6" data-track-index="0" data-track-kind="graphics">
+        <div id="ring"></div>
+        <div class="rowtxt" id="max">MAXIMUM</div>
+        <div class="rowtxt" id="taste">TASTE</div>
+        <div class="bubbles" id="b3"></div>
+        <div class="can" id="can3" style="left:810px;top:260px">
+          <div class="word">ZERO<small>SUGAR</small></div><div class="band"></div><div class="brand">pepsi</div><div class="shine"></div>
+        </div>
+        <div class="cap kr" id="cap2" style="bottom:60px">설탕은 제로. 맛은 맥시멈.</div>
+      </div>
+
+      <!-- S4: breath -->
+      <div id="s4" class="scene clip" data-start="16" data-duration="2" data-track-index="0" data-track-kind="graphics">
+        <div class="bubbles" id="b4"></div>
+        <div id="hush">− 2 °C · FIZZ RISING</div>
+        <div class="center"><div id="icecold">ICE COLD</div></div>
+      </div>
+
+      <!-- S5: rapid cuts on the beat -->
+      <div id="s5" class="scene clip" data-start="18" data-duration="6" data-track-index="0" data-track-kind="graphics">
+        <div class="w" id="w0">CRISP</div><div class="w" id="w1">COLD</div><div class="w" id="w2">BOLD</div>
+        <div class="w" id="w3">FIZZ</div><div class="w" id="w4">0 kcal</div><div class="w" id="w5">ZERO</div>
+        <div class="w" id="w6">MORE</div><div class="w" id="w7">TASTE</div><div class="w" id="w8">NO</div>
+        <div class="w" id="w9">SUGAR</div><div class="w" id="w10">JUST</div><div class="w" id="w11">PEPSI</div>
+      </div>
+
+      <!-- S6: end card -->
+      <div id="s6" class="scene clip" data-start="24" data-duration="6" data-track-index="0" data-track-kind="graphics">
+        <div class="bubbles" id="b6"></div>
+        <div class="can" id="endcan">
+          <div class="word">ZERO<small>SUGAR</small></div><div class="band"></div><div class="brand">pepsi</div><div class="shine"></div>
+        </div>
+        <div id="wordmark">pepsi</div>
+        <div id="zs">ZERO SUGAR</div>
+        <div id="rule"></div>
+        <div id="slogan">MAXIMUM TASTE.<br /><b>ZERO SUGAR.</b></div>
+      </div>
+    </div>
+    </div>
+    <audio id="track" src="audio.mp3" preload="auto"></audio>
+    <button id="start" aria-label="Play"><div class="play"></div><span>PEPSI ZERO SUGAR · 30s</span></button>
+    <div id="ui"><button id="pp">❚❚</button><div id="bar"><div id="fill"></div></div><span id="time">0.0 / 30.0</span><button id="fs">⛶</button></div>
+
+    <script>
+      window.__timelines = {};
+      // seeded bubbles
+      let seed = 42; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      function fill(id, n, minS, maxS) {
+        const host = document.getElementById(id); const out = [];
+        for (let i = 0; i < n; i++) {
+          const b = document.createElement("div"); b.className = "bub";
+          const s = minS + rnd() * (maxS - minS);
+          b.style.width = b.style.height = s + "px";
+          b.style.left = rnd() * 1920 + "px"; b.style.top = 1080 + rnd() * 400 + "px";
+          host.appendChild(b); out.push({ el: b, speed: 0.5 + rnd(), sway: (rnd() - .5) * 120, delay: rnd() });
+        }
+        return out;
+      }
+      const B1 = fill("b1", 60, 4, 22), B2 = fill("b2", 40, 6, 40), B3 = fill("b3", 50, 6, 30), B4 = fill("b4", 70, 3, 16), B6 = fill("b6", 45, 6, 34);
+
+      const tl = gsap.timeline({ paused: true });
+      const rise = (arr, t0, dur, dist) => arr.forEach((b) =>
+        tl.fromTo(b.el, { y: 0, x: 0 }, { y: -(dist * b.speed) - 400, x: b.sway, duration: dur, ease: "none" }, t0));
+
+      // ---- S1 0-4
+      rise(B1, 0, 4, 900);
+      tl.from("#psst .ch", { y: 140, opacity: 0, scaleY: 0.2, duration: 0.35, stagger: 0.42, ease: "back.out(3)" }, 0.5);
+      tl.to("#psst", { scale: 1.35, scaleX: 1.6, duration: 3, ease: "power1.in" }, 0.5);
+      tl.to("#psst .ch", { x: () => (Math.round(rnd() * 2) - 1) * 6, duration: 0.05, repeat: 9, yoyo: true, ease: "none" }, 3.0);
+      tl.to("#flash", { opacity: 1, duration: 0.08, ease: "power4.out" }, 3.55);
+      tl.to("#flash", { opacity: 0, duration: 0.3, ease: "power2.in" }, 3.66);
+
+      // ---- S2 4-10  (beats every 0.5)
+      rise(B2, 4, 6, 1200);
+      tl.from("#zero .ch", { yPercent: -160, scaleY: 1.8, opacity: 0, duration: 0.28, stagger: 0.5, ease: "expo.out" }, 4.0);
+      tl.to("#zero", { y: -170, scale: 0.78, duration: 0.6, ease: "expo.inOut" }, 6.0);
+      tl.from("#sugar", { scaleX: 2.2, opacity: 0, duration: 0.7, ease: "expo.out" }, 6.2);
+      tl.from("#g0", { scale: 0, rotation: -25, duration: 0.5, ease: "back.out(2.5)" }, 7.0);
+      tl.from("#cap1", { y: 40, opacity: 0, duration: 0.35, ease: "power3.out" }, 5.0);
+      tl.to("#cap1", { opacity: 0, duration: 0.25 }, 8.2);
+      tl.to("#zero", { scale: 0.7, rotation: -4, duration: 2, ease: "none" }, 7.0);
+      tl.fromTo("#s2wipe", { scaleY: 0 }, { scaleY: 1, duration: 0.45, ease: "expo.in" }, 9.55);
+
+      // ---- S3 10-16
+      rise(B3, 10, 6, 1100);
+      tl.from("#can3", { y: 700, rotation: 18, duration: 0.9, ease: "expo.out" }, 10.0);
+      tl.to("#can3", { y: -20, rotation: -3, duration: 5, ease: "sine.inOut" }, 10.9);
+      tl.fromTo("#can3 .shine", { x: -120 }, { x: 320, duration: 1.2, ease: "power2.inOut" }, 11.0);
+      tl.fromTo("#max", { scaleX: 0.05, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.6, ease: "expo.out" }, 10.5);
+      tl.to("#max", { scaleX: 1.6, duration: 5, ease: "none" }, 11.1);
+      tl.fromTo("#taste", { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 11.0);
+      tl.to("#taste", { xPercent: -8, duration: 4.4, ease: "none" }, 11.6);
+      tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: 1.6, opacity: 0, duration: 1.0, ease: "power2.out" }, 10.0);
+      tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: 1.6, opacity: 0, duration: 1.0, ease: "power2.out", immediateRender: false }, 12.0);
+      tl.fromTo("#ring", { scale: 0.2, opacity: 1 }, { scale: 1.6, opacity: 0, duration: 1.0, ease: "power2.out", immediateRender: false }, 14.0);
+      tl.from("#cap2", { y: 40, opacity: 0, duration: 0.35, ease: "power3.out" }, 12.0);
+      tl.to("#cap2", { opacity: 0, duration: 0.25 }, 15.5);
+
+      // ---- S4 16-18 breakdown
+      B4.forEach((b) => tl.fromTo(b.el, { y: 0, x: 0 }, { y: -(700 * b.speed) - 500, x: b.sway * .3, duration: 2, ease: "none" }, 16));
+      tl.fromTo("#icecold", { scale: 1.3, opacity: 0, filter: "blur(20px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.0, ease: "power2.out" }, 16.0);
+      tl.to("#icecold", { scale: 0.92, color: "rgba(191,230,255,1)", duration: 0.9, ease: "power2.in" }, 17.05);
+      tl.from("#hush", { opacity: 0, scaleX: 1.8, duration: 0.8, ease: "power2.out" }, 16.2);
+
+      // ---- S5 18-24  word per beat
+      const pal = [["#0a3cff","#fff"],["#fff","#0a3cff"],["#05060a","#fff"],["#bfe6ff","#05060a"],["#0a3cff","#fff"],["#e4002b","#fff"],
+                   ["#05060a","#1e6bff"],["#fff","#05060a"],["#0a3cff","#fff"],["#05060a","#fff"],["#bfe6ff","#0a3cff"],["#0a3cff","#fff"]];
+      for (let i = 0; i < 12; i++) {
+        const t = 18 + i * 0.5, id = "#w" + i;
+        tl.set(id, { opacity: 1, backgroundColor: pal[i][0], color: pal[i][1] }, t);
+        tl.fromTo(id, { scale: i % 2 ? 1.6 : 0.6, rotation: (i % 3 - 1) * 6 }, { scale: 1, rotation: 0, duration: 0.35, ease: "expo.out" }, t);
+        if (i < 11) tl.set(id, { opacity: 0 }, t + 0.5);
+      }
+      tl.to("#w11", { scale: 0.85, duration: 0.15, ease: "power2.in" }, 23.85);
+
+      // ---- S6 24-30 end card
+      rise(B6, 24, 6, 1000);
+      tl.from("#endcan", { y: 800, rotation: -20, duration: 1.0, ease: "expo.out" }, 24.0);
+      tl.to("#endcan", { y: -16, duration: 5, ease: "sine.inOut" }, 25.0);
+      tl.fromTo("#endcan .shine", { x: -120 }, { x: 320, duration: 1.4, ease: "power2.inOut" }, 25.2);
+      tl.from("#wordmark", { x: -60, opacity: 0, duration: 0.6, ease: "expo.out" }, 24.5);
+      tl.from("#zs", { scaleX: 1.8, transformOrigin: "0% 50%", opacity: 0, duration: 0.7, ease: "expo.out" }, 25.0);
+      tl.from("#rule", { scaleX: 0, duration: 0.6, ease: "expo.inOut" }, 26.2);
+      tl.from("#slogan", { y: 40, opacity: 0, duration: 0.5, ease: "power3.out" }, 26.6);
+      tl.to("#wordmark", { scale: 1.03, transformOrigin: "0% 50%", duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, 28.0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+
+      // ---- standalone player: audio is the master clock
+      const DUR = 30, audio = document.getElementById("track"), stage = document.getElementById("stage");
+      const scenes = [...document.querySelectorAll(".scene")].map((el) => ({ el, a: +el.dataset.start, b: +el.dataset.start + +el.dataset.duration }));
+      let clock = 0, playing = false, last = 0;
+      function fit() { const k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = `scale(${k}) translate(-50%, -50%)`; }
+      addEventListener("resize", fit); fit();
+      function render(t) {
+        t = Math.max(0, Math.min(DUR - 0.001, t));
+        scenes.forEach((s) => (s.el.style.display = t >= s.a && t < s.b ? "block" : "none"));
+        tl.seek(t, false);
+        document.getElementById("fill").style.width = (t / DUR) * 100 + "%";
+        document.getElementById("time").textContent = t.toFixed(1) + " / 30.0";
+      }
+      function loop(now) {
+        if (playing) {
+          if (!audio.paused && !isNaN(audio.currentTime)) clock = audio.currentTime;
+          else clock += (now - last) / 1000;
+          if (clock >= DUR) { clock = DUR - 0.001; setPlaying(false); }
+        }
+        last = now; render(clock); requestAnimationFrame(loop);
+      }
+      function setPlaying(p) {
+        playing = p; document.body.classList.toggle("paused", !p);
+        document.getElementById("pp").textContent = p ? "❚❚" : "►";
+        if (p) { if (clock >= DUR - 0.01) clock = 0; audio.currentTime = clock; audio.play().catch(() => {}); } else audio.pause();
+      }
+      document.getElementById("start").onclick = (e) => { e.currentTarget.remove(); clock = 0; setPlaying(true); };
+      document.getElementById("pp").onclick = () => setPlaying(!playing);
+      document.getElementById("bar").onclick = (e) => { const r = e.currentTarget.getBoundingClientRect(); clock = ((e.clientX - r.left) / r.width) * DUR; audio.currentTime = clock; };
+      document.getElementById("fs").onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
+      addEventListener("keydown", (e) => { if (e.code === "Space") { e.preventDefault(); if (document.getElementById("start")) document.getElementById("start").click(); else setPlaying(!playing); } });
+      document.body.classList.add("paused");
+      document.fonts.ready.then(() => requestAnimationFrame(loop));
+    </script>
+  </body>
+</html>
