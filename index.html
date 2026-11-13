@@ -16,6 +16,7 @@
         --black: #05060a;
         --white: #ffffff;
         --red: #e4002b;
+        --lime: #9be22d;
         --font-display: "Archivo Black";
         --font-cond: "League Gothic";
       }
@@ -43,16 +44,9 @@
       .bubbles { position: absolute; inset: 0; pointer-events: none; }
       .bub { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.7), rgba(255,255,255,.05) 45%, transparent 60%); }
 
-      /* can (swap with real product shot: replace .can contents with <img src="assets/can.png">) */
-      .can { position: absolute; width: 300px; height: 560px; border-radius: 34px / 26px; background:
-          linear-gradient(90deg, #020205 0%, #23262e 14%, #0b0c10 30%, #000 55%, #2a2d36 78%, #08090c 100%); box-shadow: 0 60px 120px rgba(0,40,255,.35); overflow: hidden; }
-      .can::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 34px; background: linear-gradient(90deg,#6c7280,#e9edf3 25%,#8a909c 50%,#f4f6fa 75%,#6c7280); border-radius: 34px 34px 6px 6px / 20px 20px 6px 6px; }
-      .can::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: linear-gradient(90deg,#5b616d,#d7dbe2 30%,#7b818c 60%,#e6e9ee); }
-      .can .band { position: absolute; left: 0; right: 0; top: 300px; height: 70px; background: linear-gradient(90deg,#0028b8,var(--electric) 30%,#0a3cff 60%,#0019a0); }
-      .can .word { position: absolute; left: 50%; top: 92px; transform: translateX(-50%); font-family: var(--font-cond); font-size: 150px; line-height: .82; text-align: center; color: #fff; letter-spacing: .01em; }
-      .can .word small { display: block; font-size: 64px; color: var(--electric); }
-      .can .brand { position: absolute; left: 0; right: 0; top: 314px; text-align: center; font-family: var(--font-display); font-size: 36px; color: #fff; letter-spacing: -.02em; }
-      .can .shine { position: absolute; top: 0; bottom: 0; width: 60px; left: 60px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent); }
+      /* can (swap with real product shot: replace .can contents with <img src="assets/can-clean.png">) */
+      .can { position: absolute; width: 420px; height: 560px; }
+      .can img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 50px 70px rgba(0,30,200,.55)); }
       .drop { position: absolute; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(190,220,255,.35) 40%, rgba(255,255,255,.05) 70%); }
 
       /* S1 */
@@ -64,7 +58,7 @@
       #s2 { background: var(--blue); }
       #zero { font-family: var(--font-display); font-size: 420px; line-height: .8; letter-spacing: -.04em; }
       #sugar { position: absolute; top: 640px; left: 0; right: 0; text-align: center; font-family: var(--font-cond); font-size: 220px; letter-spacing: .3em; color: transparent; -webkit-text-stroke: 4px #fff; }
-      #g0 { position: absolute; right: 150px; top: 120px; font-family: var(--font-display); font-size: 160px; color: var(--ice); }
+      #g0 { position: absolute; right: 150px; top: 120px; font-family: var(--font-display); font-size: 160px; color: var(--lime); }
       #g0 span { font-size: 60px; }
       #s2wipe { position: absolute; inset: 0; background: var(--black); transform-origin: 50% 100%; }
 
@@ -86,11 +80,11 @@
 
       /* S6 */
       #s6 { background: radial-gradient(circle at 30% 55%, #1240ff 0%, #061a8a 40%, #020414 100%); }
-      #endcan { left: 330px; top: 260px; }
+      #endcan { left: 290px; top: 240px; }
       #wordmark { position: absolute; left: 820px; top: 270px; font-family: var(--font-display); font-size: 210px; letter-spacing: -.06em; line-height: .9; }
       #zs { position: absolute; left: 832px; top: 470px; font-family: var(--font-cond); font-size: 120px; letter-spacing: .28em; color: var(--ice); }
       #slogan { position: absolute; left: 836px; top: 640px; font-family: var(--font-display); font-size: 64px; letter-spacing: -.02em; line-height: 1.1; }
-      #slogan b { color: var(--ice); font-weight: inherit; }
+      #slogan b { color: var(--lime); font-weight: inherit; }
       #rule { position: absolute; left: 836px; top: 612px; width: 820px; height: 6px; background: var(--white); transform-origin: 0 50%; }
     </style>
   </head>
@@ -121,9 +115,7 @@
         <div class="rowtxt" id="max">MAXIMUM</div>
         <div class="rowtxt" id="taste">TASTE</div>
         <div class="bubbles" id="b3"></div>
-        <div class="can" id="can3" style="left:810px;top:260px">
-          <div class="word">ZERO<small>SUGAR</small></div><div class="band"></div><div class="brand">pepsi</div><div class="shine"></div>
-        </div>
+        <div class="can" id="can3" style="left:750px;top:240px"><img src="assets/can-clean.png" alt="Pepsi Zero Sugar Lime can" data-var-src="can" /></div>
         <div class="cap kr" id="cap2" style="bottom:60px">설탕은 제로. 맛은 맥시멈.</div>
       </div>
 
@@ -137,7 +129,7 @@
       <!-- S5: rapid cuts on the beat -->
       <div id="s5" class="scene clip" data-start="18" data-duration="6" data-track-index="0" data-track-kind="graphics">
         <div class="w" id="w0">CRISP</div><div class="w" id="w1">COLD</div><div class="w" id="w2">BOLD</div>
-        <div class="w" id="w3">FIZZ</div><div class="w" id="w4">0 kcal</div><div class="w" id="w5">ZERO</div>
+        <div class="w" id="w3">LIME</div><div class="w" id="w4">0 kcal</div><div class="w" id="w5">ZERO</div>
         <div class="w" id="w6">MORE</div><div class="w" id="w7">TASTE</div><div class="w" id="w8">NO</div>
         <div class="w" id="w9">SUGAR</div><div class="w" id="w10">JUST</div><div class="w" id="w11">PEPSI</div>
       </div>
@@ -145,9 +137,7 @@
       <!-- S6: end card -->
       <div id="s6" class="scene clip" data-start="24" data-duration="6" data-track-index="0" data-track-kind="graphics">
         <div class="bubbles" id="b6"></div>
-        <div class="can" id="endcan">
-          <div class="word">ZERO<small>SUGAR</small></div><div class="band"></div><div class="brand">pepsi</div><div class="shine"></div>
-        </div>
+        <div class="can" id="endcan"><img src="assets/can-clean.png" alt="Pepsi Zero Sugar Lime can" data-var-src="can" /></div>
         <div id="wordmark">pepsi</div>
         <div id="zs">ZERO SUGAR</div>
         <div id="rule"></div>
@@ -203,7 +193,6 @@
       rise(B3, 10, 6, 1100);
       tl.from("#can3", { y: 700, rotation: 18, duration: 0.9, ease: "expo.out" }, 10.0);
       tl.to("#can3", { y: -20, rotation: -3, duration: 5, ease: "sine.inOut" }, 10.9);
-      tl.fromTo("#can3 .shine", { x: -120 }, { x: 320, duration: 1.2, ease: "power2.inOut" }, 11.0);
       tl.fromTo("#max", { scaleX: 0.05, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.6, ease: "expo.out" }, 10.5);
       tl.to("#max", { scaleX: 1.6, duration: 5, ease: "none" }, 11.1);
       tl.fromTo("#taste", { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.6, ease: "expo.out" }, 11.0);
@@ -221,7 +210,7 @@
       tl.from("#hush", { opacity: 0, scaleX: 1.8, duration: 0.8, ease: "power2.out" }, 16.2);
 
       // ---- S5 18-24  word per beat
-      const pal = [["#0a3cff","#fff"],["#fff","#0a3cff"],["#05060a","#fff"],["#bfe6ff","#05060a"],["#0a3cff","#fff"],["#e4002b","#fff"],
+      const pal = [["#0a3cff","#fff"],["#fff","#0a3cff"],["#05060a","#fff"],["#9be22d","#05060a"],["#0a3cff","#fff"],["#e4002b","#fff"],
                    ["#05060a","#1e6bff"],["#fff","#05060a"],["#0a3cff","#fff"],["#05060a","#fff"],["#bfe6ff","#0a3cff"],["#0a3cff","#fff"]];
       for (let i = 0; i < 12; i++) {
         const t = 18 + i * 0.5, id = "#w" + i;
@@ -235,7 +224,6 @@
       rise(B6, 24, 6, 1000);
       tl.from("#endcan", { y: 800, rotation: -20, duration: 1.0, ease: "expo.out" }, 24.0);
       tl.to("#endcan", { y: -16, duration: 5, ease: "sine.inOut" }, 25.0);
-      tl.fromTo("#endcan .shine", { x: -120 }, { x: 320, duration: 1.4, ease: "power2.inOut" }, 25.2);
       tl.from("#wordmark", { x: -60, opacity: 0, duration: 0.6, ease: "expo.out" }, 24.5);
       tl.from("#zs", { scaleX: 1.8, transformOrigin: "0% 50%", opacity: 0, duration: 0.7, ease: "expo.out" }, 25.0);
       tl.from("#rule", { scaleX: 0, duration: 0.6, ease: "expo.inOut" }, 26.2);

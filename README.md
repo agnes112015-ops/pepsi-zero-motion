@@ -19,6 +19,7 @@
 - 모션/타이포: HTML + [GSAP](https://gsap.com)
 - 음악: 직접 합성한 오리지널 트랙
 - 보이스: Microsoft Edge 신경망 TTS (ko-KR-HyunsuMultilingualNeural)
+- 제품 이미지: 펩시 제로슈거 라임 공식 제품 이미지 (배경 제거)
 - 폰트: Archivo Black, League Gothic, Space Mono, Noto Sans KR (Google Fonts)
 
 ※ 비공식 팬메이드/포트폴리오 작업물입니다. Pepsi는 PepsiCo, Inc.의 상표입니다.
